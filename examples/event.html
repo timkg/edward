@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+      <script src="../dist/edward.js"></script>
+      <script>
+          
+          var log = (function(){
+              
+              var _storage = [];
+              
+              function push( data ) {
+                  _storage.push( data );
+                  edward.event.publish( '/log/changed', _storage );
+              }
+              
+              function _onLogChange( topic, data ) {
+                  console.log( 'the log changed: ', _storage.length, _storage );
+                  if( data.length == 5 ) {
+                      edward.event.publish( '/log/lengthwarning', _storage );
+                  }
+              }
+              
+              edward.event.subscribe( '/log/changed', _onLogChange )
+              
+              return {
+                  push: push
+              };
+              
+          }());
+          
+          var app = {
+              
+              timesub: undefined,
+              
+              init: function() {
+                  window.setInterval( app.publishTime, 1000 );
+                  
+                  app.timeSub = edward.event.subscribe( '/time', this.notifyTime );
+                  
+                  edward.event.subscribe( '/log/lengthwarning', this.onLogFull );
+              },
+              
+              publishTime: function() {
+                  edward.event.publish( '/time', Date.now() );
+              },
+              
+              notifyTime: function( topic, data ) {
+                  log.push( data );
+              },
+              
+              onLogFull: function() {
+                  console.log( 'warning: log is full. Stopping subscription.' );
+                  edward.event.unsubscribe( app.timeSub );
+              }
+              
+          }
+   
+          app.init();
+          
+      </script>
+  </body>
+</html>
