@@ -34,27 +34,27 @@
           
           var app = {
               
-              timesub: undefined,
-              
-              init: function() {
-                  window.setInterval( app.publishTime, 1000 );
-                  
-                  app.timeSub = edward.event.subscribe( '/time', this.notifyTime );
-                  
-                  edward.event.subscribe( '/log/lengthwarning', this.onLogFull );
-              },
-              
               publishTime: function() {
                   edward.event.publish( '/time', Date.now() );
               },
               
-              notifyTime: function( topic, data ) {
+              saveTimeToLogs: function( topic, data ) {
                   log.push( data );
               },
               
               onLogFull: function() {
                   console.log( 'warning: log is full. Stopping subscription.' );
-                  edward.event.unsubscribe( app.timeSub );
+                  edward.event.unsubscribe( app.timesubscription );
+              },
+              
+              timesubscription: undefined,
+              
+              init: function() {
+                  window.setInterval( app.publishTime, 1000 );
+                  
+                  app.timesubscription = edward.event.subscribe( '/time', this.saveTimeToLogs );
+                  
+                  edward.event.subscribe( '/log/lengthwarning', this.onLogFull );
               }
               
           }

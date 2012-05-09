@@ -1,5 +1,13 @@
 var edward = edward || {};
 
+/**
+ * Edward event/pubsub module
+ * Heavily based on 
+ *     http://www.addyosmani.com/resources/essentialjsdesignpatterns/book
+ *     
+ * TODO: unsubscribe without depending on specific subscribe tokens
+ * 
+ */
 edward.event = (function(){
     
     var topics = {},
