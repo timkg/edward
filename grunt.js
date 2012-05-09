@@ -19,7 +19,11 @@ module.exports = function(grunt) {
     },
     concat: {
       dist: {
-        src: ['src/edward.core.js', 'src/edward.utils.js', 'src/edward.point.js', 'src/edward.circle.js'],
+        src: ['src/edward.core.js', 
+              'src/edward.utils.js', 
+              'src/edward.point.js', 
+              'src/edward.circle.js',
+              'src/edward.event.js'],
         dest: 'dist/edward.js'
       }
     },
