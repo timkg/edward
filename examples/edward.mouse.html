@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        
+        canvas {
+            background-color: #eee;
+        }
+        
+    </style>
+  </head>
+  <body>
+      <script src="../dist/edward.js"></script>
+      
+      <p>Click on the canvas to see the mouse position relative to the canvas.</p>
+      
+      <canvas id="stage"></canvas>
+      
+      
+      <script>    
+          var canvas = document.getElementById( 'stage' ),
+              mousePos = edward.mouse.capture( canvas );
+              
+          canvas.addEventListener('click', function() {
+              console.log( 'x: ' + mousePos.x + ', y: ' + mousePos.y );
+          }, false );
+          
+      </script>
+  </body>
+</html>
