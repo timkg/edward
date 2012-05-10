@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <script src="../dist/edward.js"></script>
+        <p>JS trigonometry functions work with angles in radians. Edward trig functions work with degrees.</p>
+        
+        <script>
+            
+            var angle = 30,
+                deg2rad = edward.utils.deg2rad,
+                rad2deg = edward.utils.rad2deg;
+            
+            var sineRatioJS = Math.sin( deg2rad( angle ) );
+            var sineRatioEdward = edward.trig.sin( angle )
+            
+            console.log( sineRatioJS, sineRatioEdward );
+            
+            
+            var cosineRatioJS = Math.cos( deg2rad( angle ) ),
+                cosineRatioEdward = edward.trig.cos( angle )
+            
+            console.log( cosineRatioJS, cosineRatioEdward );
+            
+            
+            var tangentRatioJS = Math.tan( deg2rad( angle ) ),
+                tangentRatioEdward = edward.trig.tan( angle );
+            
+            console.log( tangentRatioJS, tangentRatioEdward );
+            
+            
+            var arcSineAngleJS = rad2deg( Math.asin( sineRatioJS ) ),
+                arcSineAngleEdward = edward.trig.asin( sineRatioEdward );
+                
+            console.log( arcSineAngleJS, arcSineAngleEdward );
+            
+            
+            var arcCosineAngleJS = rad2deg( Math.acos( cosineRatioJS ) ),
+                arcCosineAngleEdward = edward.trig.acos( cosineRatioEdward );
+                
+            console.log( arcCosineAngleJS, arcCosineAngleEdward );
+            
+        </script>
+    </body>
+</html>
