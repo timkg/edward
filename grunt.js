@@ -24,7 +24,8 @@ module.exports = function(grunt) {
               'src/edward.point.js', 
               'src/edward.circle.js',
               'src/edward.event.js',
-              'src/edward.mouse.js'],
+              'src/edward.mouse.js',
+              'src/edward.trig.js'],
         dest: 'dist/edward.js'
       }
     },
