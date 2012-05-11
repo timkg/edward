@@ -88,15 +88,13 @@ edward.Point = (function(){
     
     function Point( x, y ) {
         
-        this.x = ( x ? x : 0 );
-        this.y = ( y ? y : 0 );
+        this.x = ( x || 0 );
+        this.y = ( x || 0 );
         
         return this;
     }
     
-    var p = Point.prototype;
-    
-    edward.extend( p, {
+    edward.extend( Point.prototype, {
         distanceTo: edward.utils.distanceTo
     } );
     
@@ -288,12 +286,39 @@ edward.trig = (function(){
         return rad2deg( Math.acos( ratio ) );
     }
     
+    function atan( ratio ) {
+        return rad2deg( Math.atan( ratio ) );
+    }
+    
+    function atan2( point ) {
+        return rad2deg( Math.atan2( point.y, point.x ) );
+    }
+    
+    
     return {
         sin: sin,
         cos: cos,
         tan: tan,
         asin: asin,
-        acos: acos
+        acos: acos,
+        atan: atan,
+        atan2: atan2
+    };
+    
+}());
+var edward = edward || {};
+
+edward.rotation = (function(){
+    
+    
+    function getRotationTo( point ) {
+        
+        return edward.trig.atan2( point );
+        
+    }
+    
+    return {
+        getRotationTo: getRotationTo
     };
     
 }());

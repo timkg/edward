@@ -30,12 +30,23 @@ edward.trig = (function(){
         return rad2deg( Math.acos( ratio ) );
     }
     
+    function atan( ratio ) {
+        return rad2deg( Math.atan( ratio ) );
+    }
+    
+    function atan2( point ) {
+        return rad2deg( Math.atan2( point.y, point.x ) );
+    }
+    
+    
     return {
         sin: sin,
         cos: cos,
         tan: tan,
         asin: asin,
-        acos: acos
+        acos: acos,
+        atan: atan,
+        atan2: atan2
     };
     
 }());
