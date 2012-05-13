@@ -40,12 +40,28 @@ edward.utils = (function(){
         
     }
     
+    function setupRequestAnimationFrame() {
+        
+        if( !window.requestAnimationFrame ) {
+            window.requestAnimationFrame = (window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function( callback ) {
+                return window.setTimeout( callback, 1000/60 );
+            });
+        }
+        
+    }
+    
+    
     
     return {
         deg2rad: deg2rad,
         rad2deg: rad2deg,
         distanceTo: distanceTo,
-        distanceBetween: distanceBetween
+        distanceBetween: distanceBetween,
+        setupRequestAnimationFrame: setupRequestAnimationFrame
     };
     
     

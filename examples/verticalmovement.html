@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+        
+            canvas {
+                background-color: #eee;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <script src="ball.js"></script>
+        <script src="../dist/edward.js"></script>
+        
+        <canvas id="canvas" width="800" height="600"></canvas>
+        
+        <script>
+            
+            edward.utils.setupRequestAnimationFrame();
+            
+            function verticalMovement( startHeight, movementHeight, radianIncrementPerTick ) {
+                    
+                    this.verticalMovementAngle = ( this.verticalMovementAngle || 0 );
+                    
+                    if( !this.hasOwnProperty( 'y' ) ) {
+                        throw( "'verticalMovement()'s host object needs a 'y' property" );
+                    }
+                    
+                    this.y = startHeight + ( movementHeight * Math.sin( this.verticalMovementAngle ) );
+                    this.verticalMovementAngle += radianIncrementPerTick;
+                    
+                }
+                
+            edward.extend( Ball.prototype, {
+                verticalMovement: verticalMovement
+            });
+            
+
+            var canvas = document.getElementById( 'canvas' ),
+                ctx = canvas.getContext( '2d' ),
+                ball = new Ball();
+                
+            ball.x = 0;
+            ball.y = canvas.height / 2;
+            
+            (function drawFrame() {
+                
+                window.requestAnimationFrame( drawFrame, canvas );
+                ctx.clearRect( 0, 0, canvas.width, canvas.height );
+                
+                ball.verticalMovement( 300, 250, 0.05 );
+                ball.x += 5;
+                ball.draw( ctx );
+                
+            }());
+
+        </script>
+        
+    </body>
+</html>
