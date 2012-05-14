@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+        
+            canvas {
+                background-color: #eee;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <script src="ball.js"></script>
+        <script src="../dist/edward.js"></script>
+        
+        <canvas id="canvas" width="800" height="600"></canvas>
+        
+        <script>
+            
+            edward.utils.setupRequestAnimationFrame();
+            
+            function verticalMovement( startHeight, movementHeight, radianIncrementPerTick ) {
+                    
+                    this.verticalMovementAngle = ( this.verticalMovementAngle || 0 );
+                    
+                    if( !this.hasOwnProperty( 'y' ) ) {
+                        throw( "'verticalMovement()'s host object needs a 'y' property" );
+                    }
+                    
+                    this.y = startHeight + ( movementHeight * Math.sin( this.verticalMovementAngle ) );
+                    this.verticalMovementAngle += radianIncrementPerTick;
+                    
+                }
+                
+            edward.extend( Ball.prototype, {
+                verticalMovement: verticalMovement
+            });
+            
+
+            var canvas = document.getElementById( 'canvas' ),
+                ctx = canvas.getContext( '2d' ),
+                ball = new Ball(),
+                centerScale = 1,
+                angleX = 0,
+                angleY = 0
+                rangeX = 150,
+                rangeY = 100,
+                speedX = 0.09,
+                speedY = 0.13,
+                centerX = canvas.width / 2,
+                centerY = canvas.height / 2;
+                
+                
+            ball.x = centerX;
+            ball.y = centerY;
+            
+            (function drawFrame() {
+                
+                window.requestAnimationFrame( drawFrame, canvas );
+                ctx.clearRect( 0, 0, canvas.width, canvas.height );
+                
+                ball.x = centerX + rangeX * Math.sin( angleX );
+                ball.y = centerY + rangeY * Math.sin( angleY );
+                
+                angleX += speedX;
+                angleY += speedY;
+                
+                ball.draw( ctx );
+                
+            }());
+
+        </script>
+        
+    </body>
+</html>
