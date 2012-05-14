@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+        
+            canvas {
+                background-color: #eee;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <script src="ball.js"></script>
+        <script src="../dist/edward.js"></script>
+        
+        <canvas id="canvas" width="800" height="600"></canvas>
+        
+        <script>
+            
+            edward.utils.setupRequestAnimationFrame();
+            
+            var canvas = document.getElementById('canvas'),
+                ctx = canvas.getContext('2d'),
+                ball = new Ball(),
+                angle = 0,
+                speed = 0.05,
+                radius = 100,
+                centerX = canvas.width / 2,
+                centerY = canvas.height / 2;
+                
+                
+            (function drawFrame () {
+                window.requestAnimationFrame(drawFrame, canvas);
+                
+                ctx.clearRect( 0, 0, canvas.width, canvas.height );
+                
+                ball.x = centerX + radius * Math.cos( angle );
+                ball.y = centerY + radius * Math.sin( angle );
+                
+                angle += speed;
+                
+                ball.draw( ctx );
+                
+            }());
+
+        </script>
+        
+    </body>
+</html>
