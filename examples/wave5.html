@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+        
+            canvas {
+                background-color: #eee;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <script src="ball.js"></script>
+        <script src="../dist/edward.js"></script>
+        
+        <canvas id="canvas" width="800" height="600"></canvas>
+        
+        <script>
+            
+            edward.utils.setupRequestAnimationFrame();
+            
+            var canvas = document.getElementById('canvas'),
+                ctx = canvas.getContext('2d'),
+                angle = 0,
+                range = 100,
+                centerY = canvas.height / 2,
+                xSpeed = 2,
+                ySpeed = 0.05,
+                xPos = 0,
+                yPos = centerY;
+                
+                ctx.lineWidth = 2;
+                
+            (function drawFrame () {
+                window.requestAnimationFrame(drawFrame, canvas);
+                
+                ctx.beginPath();
+                ctx.moveTo(xPos, yPos);
+                
+                //Calculate the new position.
+                xPos += xSpeed;
+                angle += ySpeed;
+                yPos = centerY + Math.sin(angle) * range;
+                
+                ctx.lineTo(xPos, yPos);
+                ctx.stroke();
+            }());
+
+        </script>
+        
+    </body>
+</html>

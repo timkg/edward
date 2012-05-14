@@ -20,24 +20,6 @@
         <script>
             
             edward.utils.setupRequestAnimationFrame();
-            
-            function verticalMovement( startHeight, movementHeight, radianIncrementPerTick ) {
-                    
-                    this.verticalMovementAngle = ( this.verticalMovementAngle || 0 );
-                    
-                    if( !this.hasOwnProperty( 'y' ) ) {
-                        throw( "'verticalMovement()'s host object needs a 'y' property" );
-                    }
-                    
-                    this.y = startHeight + ( movementHeight * Math.sin( this.verticalMovementAngle ) );
-                    this.verticalMovementAngle += radianIncrementPerTick;
-                    
-                }
-                
-            edward.extend( Ball.prototype, {
-                verticalMovement: verticalMovement
-            });
-            
 
             var canvas = document.getElementById( 'canvas' ),
                 ctx = canvas.getContext( '2d' ),
