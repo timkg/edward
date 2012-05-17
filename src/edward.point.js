@@ -12,7 +12,8 @@ edward.Point = (function(){
     }
     
     edward.extend( Point.prototype, {
-        distanceTo: edward.utils.distanceTo
+        distanceTo: edward.utils.distanceTo,
+        lineTo: edward.canvas.lineTo
     } );
     
     return Point;
