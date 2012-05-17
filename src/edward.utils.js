@@ -56,12 +56,76 @@ edward.utils = (function(){
     
     
     
+    function colorToRGB( color, alpha ) {
+        
+        //if string format, convert to number
+        if( typeof color === 'string' && color[0] === '#' ) {
+            color = window.parseInt( color.slice(1), 16 );
+        }
+        
+        alpha = (alpha === undefined) ? 1 : alpha;
+        
+        //extract component values
+        var r = color >> 16 & 0xff,
+        g = color >> 8 & 0xff,
+        b = color & 0xff,
+        a = (alpha < 0) ? 0 : ((alpha > 1) ? 1 : alpha);
+        
+        //use 'rgba' if needed
+        if (a === 1) {
+            return "rgb("+ r +","+ g +","+ b +")";
+        } else {
+            return "rgba("+ r +","+ g +","+ b +","+ a +")";
+        }
+    }
+    
+    
+    
+    function parseColor( color, toNumber ) {
+
+        if( toNumber === true ) {
+            if( typeof color === 'number' ) {
+                    //chop off decimal
+                return (color | 0);
+            }
+
+            if (typeof color === 'string' && color[0] === '#') {
+                color = color.slice(1);
+            }
+
+            return window.parseInt(color, 16);
+
+        } else {
+            if (typeof color === 'number') {
+                //make sure our hexadecimal number is padded out
+                color = '#' + ('00000' + (color | 0).toString(16)).substr(-6);
+            }
+            return color;
+        }
+    }
+    
+    
+    function clear( canvas ) {
+        
+        if( edward.dom.isDomNode( canvas ) ) {
+            
+            var ctx = canvas.getContext( '2d' );
+            ctx.clearRect( 0, 0, canvas.width, canvas.height );
+            
+        }
+        
+    }
+    
+    
     return {
         deg2rad: deg2rad,
         rad2deg: rad2deg,
         distanceTo: distanceTo,
         distanceBetween: distanceBetween,
-        setupRequestAnimationFrame: setupRequestAnimationFrame
+        setupRequestAnimationFrame: setupRequestAnimationFrame,
+        colorToRGB: colorToRGB,
+        parseColor: parseColor,
+        clear: clear
     };
     
     
