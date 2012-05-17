@@ -1,7 +1,9 @@
 var edward = (function() {
     
     
-    var version = '0.1.0';
+    var version = '0.1.0',
+        errorLog = [],
+        throwErrors = true;
     
     
     function extend( obj, extension ) {
@@ -21,10 +23,32 @@ var edward = (function() {
     }
     
     
+    
+    function noErrors() {
+        
+        edward.throwErrors = false;
+        
+    }
+    
+    
+    function error( message ) {
+        
+        if( edward.throwErrors ) {
+            throw( message );
+        } else {
+            edward.errorLog.push( message );
+        }
+        
+    }
+    
     return {
         version: version,
+        errorLog: errorLog,
+        throwErrors: throwErrors,
         extend: extend,
-        toString: toString
+        toString: toString,
+        noErrors: noErrors,
+        error: error
     };
     
     
