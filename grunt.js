@@ -20,12 +20,14 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: ['src/edward.core.js', 
-              'src/edward.utils.js', 
-              'src/edward.point.js', 
+              'src/edward.utils.js',  
               'src/edward.circle.js',
               'src/edward.event.js',
               'src/edward.mouse.js',
               'src/edward.trig.js',
+              'src/edward.dom.js',
+              'src/edward.canvas.js',
+              'src/edward.point.js',
               'src/edward.rotation.js'],
         dest: 'dist/edward.js'
       }

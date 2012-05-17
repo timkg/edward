@@ -1,7 +1,9 @@
 var edward = (function() {
     
     
-    var version = '0.1.0';
+    var version = '0.1.0',
+        errorLog = [],
+        throwErrors = true;
     
     
     function extend( obj, extension ) {
@@ -21,10 +23,32 @@ var edward = (function() {
     }
     
     
+    
+    function noErrors() {
+        
+        edward.throwErrors = false;
+        
+    }
+    
+    
+    function error( message ) {
+        
+        if( edward.throwErrors ) {
+            throw( message );
+        } else {
+            edward.errorLog.push( message );
+        }
+        
+    }
+    
     return {
         version: version,
+        errorLog: errorLog,
+        throwErrors: throwErrors,
         extend: extend,
-        toString: toString
+        toString: toString,
+        noErrors: noErrors,
+        error: error
     };
     
     
@@ -87,34 +111,78 @@ edward.utils = (function(){
     
     
     
+    function colorToRGB( color, alpha ) {
+        
+        //if string format, convert to number
+        if( typeof color === 'string' && color[0] === '#' ) {
+            color = window.parseInt( color.slice(1), 16 );
+        }
+        
+        alpha = (alpha === undefined) ? 1 : alpha;
+        
+        //extract component values
+        var r = color >> 16 & 0xff,
+        g = color >> 8 & 0xff,
+        b = color & 0xff,
+        a = (alpha < 0) ? 0 : ((alpha > 1) ? 1 : alpha);
+        
+        //use 'rgba' if needed
+        if (a === 1) {
+            return "rgb("+ r +","+ g +","+ b +")";
+        } else {
+            return "rgba("+ r +","+ g +","+ b +","+ a +")";
+        }
+    }
+    
+    
+    
+    function parseColor( color, toNumber ) {
+
+        if( toNumber === true ) {
+            if( typeof color === 'number' ) {
+                    //chop off decimal
+                return (color | 0);
+            }
+
+            if (typeof color === 'string' && color[0] === '#') {
+                color = color.slice(1);
+            }
+
+            return window.parseInt(color, 16);
+
+        } else {
+            if (typeof color === 'number') {
+                //make sure our hexadecimal number is padded out
+                color = '#' + ('00000' + (color | 0).toString(16)).substr(-6);
+            }
+            return color;
+        }
+    }
+    
+    
+    function clear( canvas ) {
+        
+        if( edward.dom.isDomNode( canvas ) ) {
+            
+            var ctx = canvas.getContext( '2d' );
+            ctx.clearRect( 0, 0, canvas.width, canvas.height );
+            
+        }
+        
+    }
+    
+    
     return {
         deg2rad: deg2rad,
         rad2deg: rad2deg,
         distanceTo: distanceTo,
         distanceBetween: distanceBetween,
-        setupRequestAnimationFrame: setupRequestAnimationFrame
+        setupRequestAnimationFrame: setupRequestAnimationFrame,
+        colorToRGB: colorToRGB,
+        parseColor: parseColor,
+        clear: clear
     };
     
-    
-}());
-var edward = edward || {};
-
-
-edward.Point = (function(){
-    
-    function Point( x, y ) {
-        
-        this.x = ( x || 0 );
-        this.y = ( x || 0 );
-        
-        return this;
-    }
-    
-    edward.extend( Point.prototype, {
-        distanceTo: edward.utils.distanceTo
-    } );
-    
-    return Point;
     
 }());
 var edward = edward || {};
@@ -320,6 +388,79 @@ edward.trig = (function(){
         atan: atan,
         atan2: atan2
     };
+    
+}());
+var edward = edward || {};
+
+edward.dom = (function() {
+    
+    
+    function isDomNode( node ) {
+        
+        // based on mootools
+        if( node.nodeName ){
+            switch( node.nodeType ) {
+            case 1: return 'element';
+            case 3: return (/\S/).test(node.nodeValue) ? 'textnode' : 'whitespace';
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    return {
+        isDomNode: isDomNode
+    };
+    
+}());
+var edward = edward || {};
+
+edward.canvas = (function() {
+    
+    
+    var lineCapValues = ['butt', 'round', 'square'],
+        lineJoinValues = ['round', 'bevel', 'miter'];
+        
+    
+    function lineTo( destination, ctx ) {
+        
+        if( !this.x || !this.y ) {
+            edward.error( 'lineTo()\'s host object needs an x and y value' );
+        }
+        
+        ctx.beginPath();
+        ctx.moveTo( this.x, this.y );
+        ctx.lineTo( destination.x, destination.y );
+        ctx.stroke();
+        
+        return destination;
+        
+    }
+    
+    return {
+        lineTo: lineTo
+    };
+    
+}());
+var edward = edward || {};
+
+
+edward.Point = (function(){
+    
+    function Point( x, y ) {
+        
+        this.x = ( x || 0 );
+        this.y = ( x || 0 );
+        
+        return this;
+    }
+    
+    edward.extend( Point.prototype, {
+        distanceTo: edward.utils.distanceTo,
+        lineTo: edward.canvas.lineTo
+    } );
+    
+    return Point;
     
 }());
 var edward = edward || {};
