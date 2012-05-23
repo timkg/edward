@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+            canvas {
+                background-color: #eee;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <canvas id="stage" width="800" height="600"></canvas>
+      
+        <script src="../dist/edward.js"></script>
+        <script>
+            window.onload = function () {
+                var canvas = document.getElementById('stage'),
+                    context = canvas.getContext('2d'),
+                    mouse = edward.mouse.capture(canvas),
+                    // starting point
+                    x0 = 100,
+                    y0 = 200,
+                    // end point
+                    x2 = 300,
+                    y2 = 200;
+                    
+                canvas.addEventListener('mousemove', function () {
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // control point
+                    var x1 = mouse.x * 2 - ( ( x0 + x2 ) / 2 ),
+                        y1 = mouse.y * 2 - ( ( y0 + y2 ) / 2 );
+                        
+                    // curve toward control point given by mouse position
+                    context.beginPath();
+                    context.moveTo(x0, y0);
+                    context.quadraticCurveTo(x1, y1, x2, y2);
+                    context.stroke();
+                }, false);
+            };
+        </script>
+
+        
+    </body>
+</html>

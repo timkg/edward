@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+            canvas {
+                background-color: #eee;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <canvas id="stage" width="800" height="600"></canvas>
+      
+        <script src="../dist/edward.js"></script>
+        <script>
+            
+            window.onload = function () {
+                var canvas = document.getElementById('stage'),
+                    context = canvas.getContext('2d'),
+                    mouse = edward.mouse.capture(canvas);
+                    
+                function onMouseMove () {
+                    context.lineTo(mouse.x, mouse.y);
+                    context.stroke();
+                }
+                
+                canvas.addEventListener('mousedown', function () {
+                    context.beginPath();
+                    context.moveTo(mouse.x, mouse.y);
+                    canvas.addEventListener('mousemove', onMouseMove, false);
+                }, false);
+                
+                canvas.addEventListener('mouseup', function () {
+                   canvas.removeEventListener('mousemove', onMouseMove, false);
+                }, false);
+            };
+            
+        </script>
+        
+        
+    </body>
+</html>
