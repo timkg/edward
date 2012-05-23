@@ -41,7 +41,7 @@
             (function drawFrame() {
                 
                 window.requestAnimationFrame( drawFrame, canvas );
-                edward.utils.clear( canvas );
+                edward.canvas.clear( canvas );
                 
                 ball.x = centerX + rangeX * Math.sin( angleX );
                 ball.y = centerY + rangeY * Math.sin( angleY );

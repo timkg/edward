@@ -105,18 +105,6 @@ edward.utils = (function(){
     }
     
     
-    function clear( canvas ) {
-        
-        if( edward.dom.isDomNode( canvas ) ) {
-            
-            var ctx = canvas.getContext( '2d' );
-            ctx.clearRect( 0, 0, canvas.width, canvas.height );
-            
-        }
-        
-    }
-    
-    
     return {
         deg2rad: deg2rad,
         rad2deg: rad2deg,

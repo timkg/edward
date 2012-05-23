@@ -35,7 +35,7 @@
             (function drawFrame() {
                 
                 window.requestAnimationFrame( drawFrame, canvas );
-                edward.utils.clear( canvas );
+                edward.canvas.clear( canvas );
                 
                 ball.scaleX = ball.scaleY = centerScale + Math.sin( angle ) * range;
                 

@@ -3,6 +3,18 @@ var edward = edward || {};
 edward.canvas = (function() {
     
     
+    function clear( canvas ) {
+        
+        if( edward.dom.isDomNode( canvas ) ) {
+            
+            var ctx = canvas.getContext( '2d' );
+            ctx.clearRect( 0, 0, canvas.width, canvas.height );
+            
+        }
+        
+    }
+    
+    
     var lineCapValues = ['butt', 'round', 'square'],
         lineJoinValues = ['round', 'bevel', 'miter'];
         
@@ -23,6 +35,7 @@ edward.canvas = (function() {
     }
     
     return {
+        clear: clear,
         lineTo: lineTo
     };
     

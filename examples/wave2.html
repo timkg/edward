@@ -49,7 +49,7 @@
             (function drawFrame() {
                 
                 window.requestAnimationFrame( drawFrame, canvas );
-                edward.utils.clear( canvas );
+                edward.canvas.clear( canvas );
                 
                 ball.verticalMovement( 300, 250, 0.05 );
                 ball.x += 5;
