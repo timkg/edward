@@ -25,27 +25,30 @@
           var stage = document.getElementById( 'stage' ),
               ctx = stage.getContext( '2d' ),
               mouse = edward.mouse.capture( stage ),
-              arrow = new Arrow( stage );
+              arrow = new Arrow( stage ),
+              speed = 3;
           
+          edward.utils.setupRequestAnimationFrame();
           
-          arrow.x = 400;
-          arrow.y = 300;
-          
-          arrow.draw( );  
   
-          stage.addEventListener('mousemove', function() {
-              edward.utils.clear( canvas );
+          (function drawFrame() {
+              window.requestAnimationFrame( drawFrame, stage );
+              edward.utils.clear( stage );
               
               var normalizedMousePosition = new edward.Point();
               
               normalizedMousePosition.x = mouse.x - arrow.x;
               normalizedMousePosition.y = mouse.y - arrow.y;
               
-              
               arrow.rotation = edward.rotation.getRotationTo( normalizedMousePosition );
               
+              arrow.velocity = new edward.Vector( speed, arrow.rotation );
+              
+              arrow.x += arrow.velocity.x;
+              arrow.y += arrow.velocity.y;
+              
               arrow.draw( );
-          }, false );
+          }());
           
           
       </script>
