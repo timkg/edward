@@ -28,6 +28,7 @@ module.exports = function(grunt) {
               'src/edward.dom.js',
               'src/edward.canvas.js',
               'src/edward.point.js',
+              'src/edward.vector.js',
               'src/edward.rotation.js'],
         dest: 'dist/edward.js'
       }

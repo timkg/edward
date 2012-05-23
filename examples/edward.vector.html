@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <script src="../dist/edward.js"></script>
+        <script>
+            var v1 = new edward.Vector( 5, 45 ),
+                v2 = new edward.Vector( 5, 180 );
+            
+            console.log( 'Vector v1, created with magnitude 5 and direction 45º,' +
+                         'has a value of x of ' + v1.x + ' and y of ' + v1.y );
+                     
+            console.log( 'Vector v2, created with magnitude 5 and direction 180º,' +
+                         'has a value of x of ' + v2.x + ' and y of ' + v2.y );
+                 
+                 
+            console.log( 'Vector v1, created with magnitude 5 and direction 45º,' +
+                         'has a value of x of ' + Math.round( v1.x ) + ' and y of ' + Math.round( v1.y ) );
+                     
+            console.log( 'Vector v2, created with magnitude 5 and direction 180º,' +
+                         'has a value of x of ' + Math.round( v2.x ) + ' and y of ' + Math.round( v2.y ) );
+                     
+            v1.add( v2 );
+            
+            console.log( 'The sum of v1 and v2 ' +
+                         'has a value of x of ' + Math.round( v1.x ) + ' and y of ' + Math.round( v1.y ) );         
+                     
+        </script>
+    </body>
+</html>
