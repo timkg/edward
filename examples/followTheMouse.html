@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        
+        canvas {
+            background-color: #eee;
+        }
+        
+    </style>
+  </head>
+  <body>
+      
+      <canvas id="stage" width="800" height="600"></canvas>
+      
+      <script src="../dist/edward.js"></script>
+      <script src="arrow.js"></script>
+      
+      
+      
+      <script>
+          
+          var stage = document.getElementById( 'stage' ),
+              ctx = stage.getContext( '2d' ),
+              mouse = edward.mouse.capture( stage ),
+              arrow = new Arrow( stage );
+          
+          
+          arrow.x = 400;
+          arrow.y = 300;
+          
+          arrow.draw( );  
+  
+          stage.addEventListener('mousemove', function() {
+              edward.utils.clear( canvas );
+              
+              var normalizedMousePosition = new edward.Point();
+              
+              normalizedMousePosition.x = mouse.x - arrow.x;
+              normalizedMousePosition.y = mouse.y - arrow.y;
+              
+              
+              arrow.rotation = edward.rotation.getRotationTo( normalizedMousePosition );
+              
+              arrow.draw( );
+          }, false );
+          
+          
+      </script>
+      
+  </body>
+</html>
