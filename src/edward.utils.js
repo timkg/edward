@@ -112,8 +112,7 @@ edward.utils = (function(){
         distanceBetween: distanceBetween,
         setupRequestAnimationFrame: setupRequestAnimationFrame,
         colorToRGB: colorToRGB,
-        parseColor: parseColor,
-        clear: clear
+        parseColor: parseColor
     };
     
     
