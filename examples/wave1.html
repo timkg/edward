@@ -21,22 +21,62 @@
             
             edward.utils.setupRequestAnimationFrame();
             
-            function verticalMovement( startHeight, movementHeight, radianIncrementPerTick ) {
-                    
-                    this.verticalMovementAngle = ( this.verticalMovementAngle || 0 );
-                    
-                    if( !this.hasOwnProperty( 'y' ) ) {
-                        throw( "'verticalMovement()'s host object needs a 'y' property" );
+            
+            function oscillate( opts ) {
+                        
+                var opts = opts || {},
+                    _params = {
+                        'target': true,
+                        'start': true,
+                        'function': true,
+                        'increment': true,
+                        'extension': true
+                };
+
+                for( p in _params ) {
+                    if( !( p in opts ) ) {
+                        edward.error( 'oscillate requires argument ' + p );
                     }
-                    
-                    this.y = startHeight + ( movementHeight * Math.sin( this.verticalMovementAngle ) );
-                    this.verticalMovementAngle += radianIncrementPerTick;
-                    
                 }
                 
-            edward.extend( Ball.prototype, {
-                verticalMovement: verticalMovement
-            });
+                // TODO: check if function is in edward.trig
+
+                this.opts = opts;
+
+                this[opts['target']] = opts.start;
+
+                this.angle = opts.increment;
+
+                var callback = function( opts ) {
+                    var instance = this;
+
+                    this[opts['target']] = opts.start + ( opts.extension * opts['function'].call( this, this.angle ) );
+                    this.angle += opts.increment;
+                    if( this.angle > 360 ) {
+                        this.angle = this.angle % 360;
+                    }
+                }
+
+                return callback;
+
+            }
+            
+//            function verticalMovement( startHeight, movementHeight, radianIncrementPerTick ) {
+//                    
+//                this.verticalMovementAngle = ( this.verticalMovementAngle || 0 );
+//
+//                if( !this.hasOwnProperty( 'y' ) ) {
+//                    throw( "'verticalMovement()'s host object needs a 'y' property" );
+//                }
+//
+//                this.y = startHeight + ( movementHeight * Math.sin( this.verticalMovementAngle ) );
+//                this.verticalMovementAngle += radianIncrementPerTick;
+//
+//            }
+//                
+//            edward.extend( Ball.prototype, {
+//                verticalMovement: verticalMovement
+//            });
             
 
             var canvas = document.getElementById( 'canvas' ),
@@ -44,15 +84,72 @@
                 ball = new Ball();
                 
             ball.x = canvas.width / 2;
-            ball.y = canvas.height / 2;
+            ball.y = 0;
+            
+            var verticalBallBehaviour = {
+                'target': 'y',
+                'start': canvas.height/2,
+                'function': edward.trig.sin,
+                'increment': 1,
+                'extension': 80
+            };
+            
+            var horizontalBallBehaviour = {
+                'target': 'x',
+                'start': canvas.width/2,
+                'function': edward.trig.cos,
+                'increment': 1,
+                'extension': 150
+            };
+            
+            var scaleXBallBehaviour = {
+                'target': 'scaleX',
+                'start': 1,
+                'function': edward.trig.cos,
+                'increment': 0.5,
+                'extension': 0.5
+            };
+            
+            var scaleYBallBehaviour = {
+                'target': 'scaleY',
+                'start': 1,
+                'function': edward.trig.cos,
+                'increment': 1.5,
+                'extension': 0.5
+            };
+            
+            var verticalBallUpdate = oscillate.call(
+                ball, verticalBallBehaviour
+            );
+            
+            var horizontalBallUpdate = oscillate.call(
+                ball, horizontalBallBehaviour
+            );
+            
+            var scaleXBallUpdate = oscillate.call(
+                ball, scaleXBallBehaviour
+            );
+            
+            var scaleYBallUpdate = oscillate.call(
+                ball, scaleYBallBehaviour
+            );
+            
+            edward.event.subscribe( 'tick', verticalBallUpdate.bind( ball, verticalBallBehaviour ) );
+            edward.event.subscribe( 'tick', horizontalBallUpdate.bind( ball, horizontalBallBehaviour ) );
+//            edward.event.subscribe( 'tick', scaleXBallUpdate.bind( ball, scaleXBallBehaviour ) );
+//            edward.event.subscribe( 'tick', scaleYBallUpdate.bind( ball, scaleYBallBehaviour ) );
+            edward.event.subscribe( 'tick', function() { ball.draw( ctx ) } );
             
             (function drawFrame() {
                 
                 window.requestAnimationFrame( drawFrame, canvas );
                 edward.canvas.clear( canvas );
                 
-                ball.verticalMovement( 300, 250, 0.05 );
-                ball.draw( ctx );
+//                ball.verticalMovement( 300, 250, 0.05 );
+//                ball.update();
+//                console.log( ball.x, ball.y );
+//                ball.draw( ctx );
+                edward.event.publish( 'tick' );
                 
             }());
 
