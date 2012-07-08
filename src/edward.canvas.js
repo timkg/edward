@@ -23,6 +23,7 @@ edward.canvas = (function() {
         
         if( !this.x || !this.y ) {
             edward.error( 'lineTo()\'s host object needs an x and y value' );
+            return false;
         }
         
         ctx.beginPath();

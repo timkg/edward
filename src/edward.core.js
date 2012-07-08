@@ -7,9 +7,10 @@ var edward = (function() {
         throwErrors = true;
     
     
-    function extend( obj, extension ) {
-        obj = obj || {};
-        extension = extension || {};
+    function extend( _obj, _extension ) {
+        
+        var obj = _obj || {},
+            extension = _extension || {};
             
         for( var prop in extension ) {
             obj[prop] = extension[prop];
@@ -44,7 +45,7 @@ var edward = (function() {
     
     
     function log( message ) {
-        if( typeof window.console !== undefined ) {
+        if( typeof window.console !== 'undefined' ) {
             window.console.log( message );
         } else {
             edward.messageLog.push( message );

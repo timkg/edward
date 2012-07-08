@@ -7,9 +7,10 @@ var edward = (function() {
         throwErrors = true;
     
     
-    function extend( obj, extension ) {
-        obj = obj || {};
-        extension = extension || {};
+    function extend( _obj, _extension ) {
+        
+        var obj = _obj || {},
+            extension = _extension || {};
             
         for( var prop in extension ) {
             obj[prop] = extension[prop];
@@ -44,7 +45,7 @@ var edward = (function() {
     
     
     function log( message ) {
-        if( typeof window.console !== undefined ) {
+        if( typeof window.console !== 'undefined' ) {
             window.console.log( message );
         } else {
             edward.messageLog.push( message );
@@ -82,6 +83,7 @@ edward.utils = (function(){
     function distanceTo( target ) {
         
         if( !this.x || !this.y || !target.x || !target.y ) {
+            edward.error( 'origin.distanceTo( target ) requires origin and point with x and y property' );
             return false;
         }
         
@@ -96,6 +98,7 @@ edward.utils = (function(){
     function distanceBetween( point1, point2 ) {
         
         if( !point1.x || !point1.y || !point2.x || !point2.y ) {
+            edward.error( 'distanceBetween( point1, point2 ) requires point1 and point2 with x and y property' );
             return false;
         }
         
@@ -447,6 +450,7 @@ edward.canvas = (function() {
         
         if( !this.x || !this.y ) {
             edward.error( 'lineTo()\'s host object needs an x and y value' );
+            return false;
         }
         
         ctx.beginPath();

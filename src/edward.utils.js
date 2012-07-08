@@ -16,6 +16,7 @@ edward.utils = (function(){
     function distanceTo( target ) {
         
         if( !this.x || !this.y || !target.x || !target.y ) {
+            edward.error( 'origin.distanceTo( target ) requires origin and point with x and y property' );
             return false;
         }
         
@@ -30,6 +31,7 @@ edward.utils = (function(){
     function distanceBetween( point1, point2 ) {
         
         if( !point1.x || !point1.y || !point2.x || !point2.y ) {
+            edward.error( 'distanceBetween( point1, point2 ) requires point1 and point2 with x and y property' );
             return false;
         }
         

@@ -37,7 +37,7 @@ edward.trig = (function(){
     function atan2( point ) {
         return rad2deg( Math.atan2( point.y, point.x ) );
     }
-    
+
     
     return {
         sin: sin,
