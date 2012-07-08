@@ -29,7 +29,9 @@ module.exports = function(grunt) {
               'src/edward.canvas.js',
               'src/edward.point.js',
               'src/edward.vector.js',
-              'src/edward.rotation.js'],
+              'src/edward.rotation.js',
+              'src/edward.oscillator.js'
+          ],
         dest: 'dist/edward.js'
       }
     },

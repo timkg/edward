@@ -3,6 +3,7 @@ var edward = (function() {
     
     var version = '0.1.0',
         errorLog = [],
+        messageLog = [],
         throwErrors = true;
     
     
@@ -41,6 +42,15 @@ var edward = (function() {
         
     }
     
+    
+    function log( message ) {
+        if( typeof window.console !== undefined ) {
+            window.console.log( message );
+        } else {
+            edward.messageLog.push( message );
+        }
+    }
+    
     return {
         version: version,
         errorLog: errorLog,
@@ -48,7 +58,8 @@ var edward = (function() {
         extend: extend,
         toString: toString,
         noErrors: noErrors,
-        error: error
+        error: error,
+        log: log
     };
     
     
@@ -158,6 +169,16 @@ edward.utils = (function(){
             return color;
         }
     }
+ 
+ 
+    // from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+    function guidGenerator() {
+        var S4 = function() {
+            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        };
+    
+        return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+    }
     
     
     return {
@@ -167,7 +188,8 @@ edward.utils = (function(){
         distanceBetween: distanceBetween,
         setupRequestAnimationFrame: setupRequestAnimationFrame,
         colorToRGB: colorToRGB,
-        parseColor: parseColor
+        parseColor: parseColor,
+        guidGenerator: guidGenerator
     };
     
     
@@ -364,7 +386,7 @@ edward.trig = (function(){
     function atan2( point ) {
         return rad2deg( Math.atan2( point.y, point.x ) );
     }
-    
+
     
     return {
         sin: sin,
@@ -508,5 +530,65 @@ edward.rotation = (function(){
     return {
         getRotationTo: getRotationTo
     };
+    
+}());
+var edward = edward || {};
+
+/***
+ * 
+ */
+edward.Oscillator = (function(){
+    
+    function Oscillator( _opts ) {
+        
+        var opts = _opts || {},
+        _params = {
+            'target': true,
+            'start': true,
+            'function': true,
+            'increment': true,
+            'range': true
+        };
+
+        for( var p in _params ) {
+            if( !( p in opts ) ) {
+                edward.error( 'Oscillator requires argument ' + p );
+                return false;
+            }
+        }
+
+
+        edward.extend( this, opts );
+
+        this.id = edward.utils.guidGenerator();
+
+        // set @target to @start-value
+        this[opts['target']] = opts.start;
+
+        // set @angle to @increment
+        this.angle = opts.increment;
+
+        // called at every TICK event
+        this.pulse = function Oscillator_Pulse( ) {
+
+            // set target to start value + ( range * func(angle) )
+            this[opts['target']] = opts.start + ( opts.range * opts['function'].call( this, this.angle ) );
+            
+            this.angle += opts.increment;
+            if( this.angle > 360 ) {
+                this.angle = this.angle % 360;
+            }
+            
+            edward.event.publish( this.id, this[opts['target']] );
+            
+//            edward.log( this.id + ' updated to ' + this[opts['target']] );
+        };
+        
+        edward.event.subscribe( 'tick', this.pulse.bind( this ) );
+        
+    }
+    
+    
+    return Oscillator;
     
 }());
