@@ -21,64 +21,6 @@
             
             edward.utils.setupRequestAnimationFrame();
             
-            
-            function oscillate( opts ) {
-                        
-                var opts = opts || {},
-                    _params = {
-                        'target': true,
-                        'start': true,
-                        'function': true,
-                        'increment': true,
-                        'extension': true
-                };
-
-                for( p in _params ) {
-                    if( !( p in opts ) ) {
-                        edward.error( 'oscillate requires argument ' + p );
-                    }
-                }
-                
-                // TODO: check if function is in edward.trig
-
-                this.opts = opts;
-
-                this[opts['target']] = opts.start;
-
-                this.angle = opts.increment;
-
-                var callback = function( opts ) {
-                    var instance = this;
-
-                    this[opts['target']] = opts.start + ( opts.extension * opts['function'].call( this, this.angle ) );
-                    this.angle += opts.increment;
-                    if( this.angle > 360 ) {
-                        this.angle = this.angle % 360;
-                    }
-                }
-
-                return callback;
-
-            }
-            
-//            function verticalMovement( startHeight, movementHeight, radianIncrementPerTick ) {
-//                    
-//                this.verticalMovementAngle = ( this.verticalMovementAngle || 0 );
-//
-//                if( !this.hasOwnProperty( 'y' ) ) {
-//                    throw( "'verticalMovement()'s host object needs a 'y' property" );
-//                }
-//
-//                this.y = startHeight + ( movementHeight * Math.sin( this.verticalMovementAngle ) );
-//                this.verticalMovementAngle += radianIncrementPerTick;
-//
-//            }
-//                
-//            edward.extend( Ball.prototype, {
-//                verticalMovement: verticalMovement
-//            });
-            
-
             var canvas = document.getElementById( 'canvas' ),
                 ctx = canvas.getContext( '2d' ),
                 ball = new Ball();
@@ -86,70 +28,70 @@
             ball.x = canvas.width / 2;
             ball.y = 0;
             
-            var verticalBallBehaviour = {
+            // how do we want our ball to behave over time?
+            // --------------------------------------------
+            
+            var verticalBallBehaviour = new edward.Oscillator({
                 'target': 'y',
                 'start': canvas.height/2,
                 'function': edward.trig.sin,
                 'increment': 1,
-                'extension': 80
-            };
+                'range': 80
+            });
             
-            var horizontalBallBehaviour = {
+            var horizontalBallBehaviour = new edward.Oscillator({
                 'target': 'x',
                 'start': canvas.width/2,
                 'function': edward.trig.cos,
                 'increment': 1,
-                'extension': 150
-            };
+                'range': 150
+            });
             
-            var scaleXBallBehaviour = {
+            var scaleXBallBehaviour = new edward.Oscillator({
                 'target': 'scaleX',
                 'start': 1,
                 'function': edward.trig.cos,
                 'increment': 0.5,
-                'extension': 0.5
-            };
+                'range': 0.5
+            });
             
-            var scaleYBallBehaviour = {
+            var scaleYBallBehaviour = new edward.Oscillator({
                 'target': 'scaleY',
                 'start': 1,
                 'function': edward.trig.cos,
                 'increment': 1.5,
-                'extension': 0.5
-            };
+                'range': 0.5
+            });
             
-            var verticalBallUpdate = oscillate.call(
-                ball, verticalBallBehaviour
-            );
+            // tie the oscillator-behaviours to the ball instance
+            // --------------------------------------------------
             
-            var horizontalBallUpdate = oscillate.call(
-                ball, horizontalBallBehaviour
-            );
+            // TODO: refactor all of this repetition
             
-            var scaleXBallUpdate = oscillate.call(
-                ball, scaleXBallBehaviour
-            );
+            edward.event.subscribe( verticalBallBehaviour.id, function( topic, value ) {
+                ball[verticalBallBehaviour.target] = value;
+            });
             
-            var scaleYBallUpdate = oscillate.call(
-                ball, scaleYBallBehaviour
-            );
+            edward.event.subscribe( horizontalBallBehaviour.id, function( topic, value ) {
+                ball[horizontalBallBehaviour.target] = value;
+            });
             
-            edward.event.subscribe( 'tick', verticalBallUpdate.bind( ball, verticalBallBehaviour ) );
-            edward.event.subscribe( 'tick', horizontalBallUpdate.bind( ball, horizontalBallBehaviour ) );
-//            edward.event.subscribe( 'tick', scaleXBallUpdate.bind( ball, scaleXBallBehaviour ) );
-//            edward.event.subscribe( 'tick', scaleYBallUpdate.bind( ball, scaleYBallBehaviour ) );
-            edward.event.subscribe( 'tick', function() { ball.draw( ctx ) } );
+            edward.event.subscribe( scaleXBallBehaviour.id, function( topic, value ) {
+                ball[scaleXBallBehaviour.target] = value;
+            });
             
+            edward.event.subscribe( scaleYBallBehaviour.id, function( topic, value ) {
+                ball[scaleYBallBehaviour.target] = value;
+            });
+            
+
             (function drawFrame() {
                 
                 window.requestAnimationFrame( drawFrame, canvas );
                 edward.canvas.clear( canvas );
-                
-//                ball.verticalMovement( 300, 250, 0.05 );
-//                ball.update();
-//                console.log( ball.x, ball.y );
-//                ball.draw( ctx );
-                edward.event.publish( 'tick' );
+                edward.event.publish( 'tick', Date.now() );
+                ball.draw( ctx );
+                // TODO: check async.js for ways to tie together all this stuff in the right order
                 
             }());
 
