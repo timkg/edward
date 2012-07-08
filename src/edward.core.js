@@ -3,6 +3,7 @@ var edward = (function() {
     
     var version = '0.1.0',
         errorLog = [],
+        messageLog = [],
         throwErrors = true;
     
     
@@ -41,6 +42,15 @@ var edward = (function() {
         
     }
     
+    
+    function log( message ) {
+        if( typeof window.console !== undefined ) {
+            window.console.log( message );
+        } else {
+            edward.messageLog.push( message );
+        }
+    }
+    
     return {
         version: version,
         errorLog: errorLog,
@@ -48,7 +58,8 @@ var edward = (function() {
         extend: extend,
         toString: toString,
         noErrors: noErrors,
-        error: error
+        error: error,
+        log: log
     };
     
     
