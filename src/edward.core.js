@@ -1,6 +1,7 @@
-var edward = (function() {
-    
-    
+if (typeof define !== 'function') { var define = require('amdefine')(module) }
+
+define([], function() {
+
     var version = '0.1.0',
         errorLog = [],
         messageLog = [],
@@ -62,6 +63,4 @@ var edward = (function() {
         error: error,
         log: log
     };
-    
-    
-}());
+});
